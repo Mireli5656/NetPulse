@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary -->
+    <color name="np_primary">#006A6A</color>
+    <color name="np_on_primary">#FFFFFF</color>
+    <color name="np_primary_container">#6FF7F6</color>
+    <color name="np_on_primary_container">#002020</color>
+
+    <!-- Secondary -->
+    <color name="np_secondary">#4A6363</color>
+    <color name="np_on_secondary">#FFFFFF</color>
+    <color name="np_secondary_container">#CCE8E7</color>
+    <color name="np_on_secondary_container">#051F1F</color>
+
+    <!-- Tertiary -->
+    <color name="np_tertiary">#4B607C</color>
+    <color name="np_on_tertiary">#FFFFFF</color>
+    <color name="np_tertiary_container">#D3E4FF</color>
+    <color name="np_on_tertiary_container">#041C35</color>
+
+    <!-- Error -->
+    <color name="np_error">#BA1A1A</color>
+    <color name="np_on_error">#FFFFFF</color>
+    <color name="np_error_container">#FFDAD6</color>
+    <color name="np_on_error_container">#410002</color>
+
+    <!-- Background and surfaces -->
+    <color name="np_background">#F4FBFA</color>
+    <color name="np_on_background">#161D1D</color>
+    <color name="np_surface">#F4FBFA</color>
+    <color name="np_on_surface">#161D1D</color>
+    <color name="np_surface_variant">#DAE5E4</color>
+    <color name="np_on_surface_variant">#3F4948</color>
+    <color name="np_surface_container_low">#EEF5F4</color>
+    <color name="np_surface_container">#E8EFEE</color>
+    <color name="np_surface_container_high">#E3E9E9</color>
+    <color name="np_outline">#6F7979</color>
+    <color name="np_outline_variant">#BEC9C8</color>
+
+    <!-- Inverse -->
+    <color name="np_inverse_surface">#2B3231</color>
+    <color name="np_inverse_on_surface">#ECF2F1</color>
+    <color name="np_inverse_primary">#4CDADA</color>
+
+    <!-- Metric status colors (latency quality) -->
+    <color name="np_status_good">#2E7D32</color>
+    <color name="np_status_warning">#B26A00</color>
+</resources>
