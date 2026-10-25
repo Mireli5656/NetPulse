@@ -25,7 +25,7 @@ A lightweight Android app for measuring network quality: real ICMP latency, jitt
 ## Download (Beta)
 
 1. Open the [Releases](../../releases) page.
-2. Download the `.apk` file from the newest release.
+2. Download the `.apk` file from the newest release. The APK is attached a few minutes after a release is published, once the build finishes.
 3. Open it on your phone and allow installation when Android asks.
 
 Requires Android 8.0 (API 26) or newer.
@@ -68,4 +68,4 @@ app/src/main/java/com/netpulse/app/
 The project is built entirely on GitHub Actions, so no local setup is needed.
 
 - Every push to `main` runs the unit tests and builds a debug APK. Open the run under the **Actions** tab and download the `NetPulse-debug-apk` artifact.
-- Pushing a version tag such as `v0.1.0-beta` publishes a GitHub pre-release with the APK attached.
+- Publishing a GitHub release (for example with the tag `v0.1.0-beta`) builds the APK and attaches it to that release automatically.
