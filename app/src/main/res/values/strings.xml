@@ -3,4 +3,26 @@
     <string name="app_name">NetPulse</string>
     <string name="main_title">NetPulse</string>
     <string name="main_subtitle">Network latency and DNS benchmark</string>
+
+    <!-- Monitor screen -->
+    <string name="monitor_host_hint">Host or IP address</string>
+    <string name="action_start">Start</string>
+    <string name="action_stop">Stop</string>
+
+    <string name="metric_latency">Latency</string>
+    <string name="metric_min">Min</string>
+    <string name="metric_avg">Average</string>
+    <string name="metric_max">Max</string>
+    <string name="metric_jitter">Jitter</string>
+    <string name="metric_loss">Packet loss</string>
+
+    <string name="value_none">—</string>
+    <string name="format_ms">%1$.1f ms</string>
+    <string name="format_percent">%1$.1f%%</string>
+    <string name="format_packets">Sent %1$d · Received %2$d</string>
+
+    <!-- Errors -->
+    <string name="error_invalid_host">Enter a valid host name or IP address.</string>
+    <string name="error_ping_unavailable">This device does not provide the system ping tool.</string>
+    <string name="error_unknown">Something went wrong. Please try again.</string>
 </resources>
