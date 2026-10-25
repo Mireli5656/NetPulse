@@ -1,1 +1,71 @@
-# Netpulse
+# NetPulse
+
+A lightweight Android app for measuring network quality: real ICMP latency, jitter and packet loss. DNS benchmarking is on the roadmap.
+
+> **Status: Beta (v0.1.0-beta).** Core ping monitoring works. Other features are still in development, see the [roadmap](#roadmap).
+
+## Features
+
+### Available now
+
+- Live ICMP ping monitor with Start / Stop
+- Latency, minimum / average / maximum, jitter and packet loss (rolling window of the last 300 samples)
+- Material Design 3 interface with light and dark themes that follow the system setting
+- Test survives screen rotation and stops automatically when the app leaves the foreground
+- Host name and IP address validation
+
+### Roadmap
+
+- DNS benchmark for Cloudflare, Google, Quad9 and Control D, measuring real DNS query time separately from ICMP ping
+- Interactive latency charts
+- Test history (Room) and CSV export
+- Settings (DataStore)
+- Signed release builds
+
+## Download (Beta)
+
+1. Open the [Releases](../../releases) page.
+2. Download the `.apk` file from the newest release.
+3. Open it on your phone and allow installation when Android asks.
+
+Requires Android 8.0 (API 26) or newer.
+
+Beta builds are signed with a debug key. A new beta may therefore need the previous one to be uninstalled first.
+
+## How it works
+
+NetPulse runs the device's system `ping` tool inside the app and reads the round-trip time from each reply. Packets that get no reply within 2 seconds count as lost. Jitter is the mean absolute difference between consecutive successful round-trip times.
+
+Some devices restrict the system `ping` tool. In that case the app shows an error message instead of results.
+
+## Privacy
+
+- Only two permissions: `INTERNET` and `ACCESS_NETWORK_STATE`. No location, contacts or storage access.
+- No accounts, ads, analytics or tracking libraries.
+- Ping packets go only to the host you enter (default `1.1.1.1`).
+- Nothing is uploaded. Backups are disabled and cleartext HTTP traffic is blocked.
+
+## Tech stack
+
+- Kotlin, XML layouts with ViewBinding, Material Design 3
+- MVVM with Kotlin Coroutines and StateFlow
+- Room and DataStore (already included as dependencies, used in upcoming stages)
+- Gradle 8.9, Android Gradle Plugin 8.7.3, Kotlin 2.0.21, JDK 17
+- compileSdk / targetSdk 35, minSdk 26
+
+## Project structure
+
+```
+app/src/main/java/com/netpulse/app/
+├── MainActivity.kt
+├── domain/        ping models and statistics
+├── network/       ping engine
+└── ui/monitor/    monitor screen state and logic
+```
+
+## Building
+
+The project is built entirely on GitHub Actions, so no local setup is needed.
+
+- Every push to `main` runs the unit tests and builds a debug APK. Open the run under the **Actions** tab and download the `NetPulse-debug-apk` artifact.
+- Pushing a version tag such as `v0.1.0-beta` publishes a GitHub pre-release with the APK attached.
