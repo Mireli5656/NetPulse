@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NetPulse</string>
+    <string name="main_title">NetPulse</string>
+    <string name="main_subtitle">Network latency and DNS benchmark</string>
+</resources>
