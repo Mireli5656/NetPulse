@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.NetPulse" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary -->
+        <item name="colorPrimary">@color/np_primary</item>
+        <item name="colorOnPrimary">@color/np_on_primary</item>
+        <item name="colorPrimaryContainer">@color/np_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/np_on_primary_container</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">@color/np_secondary</item>
+        <item name="colorOnSecondary">@color/np_on_secondary</item>
+        <item name="colorSecondaryContainer">@color/np_secondary_container</item>
+        <item name="colorOnSecondaryContainer">@color/np_on_secondary_container</item>
+
+        <!-- Tertiary -->
+        <item name="colorTertiary">@color/np_tertiary</item>
+        <item name="colorOnTertiary">@color/np_on_tertiary</item>
+        <item name="colorTertiaryContainer">@color/np_tertiary_container</item>
+        <item name="colorOnTertiaryContainer">@color/np_on_tertiary_container</item>
+
+        <!-- Error -->
+        <item name="colorError">@color/np_error</item>
+        <item name="colorOnError">@color/np_on_error</item>
+        <item name="colorErrorContainer">@color/np_error_container</item>
+        <item name="colorOnErrorContainer">@color/np_on_error_container</item>
+
+        <!-- Background and surfaces -->
+        <item name="android:colorBackground">@color/np_background</item>
+        <item name="colorOnBackground">@color/np_on_background</item>
+        <item name="colorSurface">@color/np_surface</item>
+        <item name="colorOnSurface">@color/np_on_surface</item>
+        <item name="colorSurfaceVariant">@color/np_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/np_on_surface_variant</item>
+        <item name="colorSurfaceContainerLow">@color/np_surface_container_low</item>
+        <item name="colorSurfaceContainer">@color/np_surface_container</item>
+        <item name="colorSurfaceContainerHigh">@color/np_surface_container_high</item>
+        <item name="colorOutline">@color/np_outline</item>
+        <item name="colorOutlineVariant">@color/np_outline_variant</item>
+
+        <!-- Inverse -->
+        <item name="colorSurfaceInverse">@color/np_inverse_surface</item>
+        <item name="colorOnSurfaceInverse">@color/np_inverse_on_surface</item>
+        <item name="colorPrimaryInverse">@color/np_inverse_primary</item>
+    </style>
+</resources>
