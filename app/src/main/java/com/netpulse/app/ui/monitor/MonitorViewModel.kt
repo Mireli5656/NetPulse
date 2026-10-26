@@ -21,8 +21,16 @@ enum class MonitorError {
     UNKNOWN
 }
 
+/** How often a ping is sent. Slower intervals let Wi-Fi power saving inflate latency. */
+enum class PingInterval(val ms: Long) {
+    FAST(PingEngine.MIN_INTERVAL_MS),
+    NORMAL(500L),
+    SLOW(1000L)
+}
+
 data class MonitorUiState(
     val host: String = MonitorViewModel.DEFAULT_HOST,
+    val interval: PingInterval = PingInterval.FAST,
     val isRunning: Boolean = false,
     val stats: PingStats = PingStats.EMPTY,
     val samples: List<PingSample> = emptyList(),
@@ -43,6 +51,11 @@ class MonitorViewModel : ViewModel() {
         _uiState.update { it.copy(host = host, error = null) }
     }
 
+    fun onIntervalChanged(interval: PingInterval) {
+        if (_uiState.value.isRunning) return
+        _uiState.update { it.copy(interval = interval) }
+    }
+
     fun start() {
         if (pingJob?.isActive == true) return
 
@@ -51,6 +64,7 @@ class MonitorViewModel : ViewModel() {
             _uiState.update { it.copy(error = MonitorError.INVALID_HOST) }
             return
         }
+        val interval = _uiState.value.interval
 
         _uiState.update {
             it.copy(
@@ -64,7 +78,7 @@ class MonitorViewModel : ViewModel() {
 
         pingJob = viewModelScope.launch {
             try {
-                engine.pingFlow(host).collect { sample ->
+                engine.pingFlow(host, interval.ms).collect { sample ->
                     _uiState.update { state ->
                         val window = (state.samples + sample).takeLast(MAX_SAMPLES)
                         state.copy(
