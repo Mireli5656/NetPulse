@@ -21,6 +21,13 @@
     <string name="format_percent">%1$.1f%%</string>
     <string name="format_packets">Sent %1$d · Received %2$d</string>
 
+    <!-- Ping interval -->
+    <string name="interval_label">Ping interval</string>
+    <string name="interval_fast">0.2 s</string>
+    <string name="interval_normal">0.5 s</string>
+    <string name="interval_slow">1 s</string>
+    <string name="interval_hint">Slower intervals can show higher latency, because Wi-Fi power saving may put the radio to sleep between pings.</string>
+
     <!-- Errors -->
     <string name="error_invalid_host">Enter a valid host name or IP address.</string>
     <string name="error_ping_unavailable">This device does not provide the system ping tool.</string>
