@@ -18,19 +18,29 @@ class PingUnavailableException(message: String, cause: Throwable? = null) :
  * The returned flow runs until the collector is cancelled.
  */
 class PingEngine(
-    private val intervalMs: Long = DEFAULT_INTERVAL_MS,
     private val timeoutMs: Long = DEFAULT_TIMEOUT_MS
 ) {
 
-    fun pingFlow(host: String): Flow<PingSample> {
+    /**
+     * Emits one sample per interval. The interval is measured from the start
+     * of one ping to the start of the next, so the rhythm stays steady no
+     * matter how long each ping takes. If a ping takes longer than the
+     * interval, the next one starts immediately (no catching up in bursts).
+     */
+    fun pingFlow(host: String, intervalMs: Long = DEFAULT_INTERVAL_MS): Flow<PingSample> {
         require(isValidHost(host)) { "Invalid host: $host" }
+        require(intervalMs >= MIN_INTERVAL_MS) { "Interval too short: $intervalMs ms" }
 
         return flow {
             var sequence = 1
             while (true) {
+                val startedAt = System.nanoTime()
                 val rtt = runInterruptible(Dispatchers.IO) { pingOnce(host) }
                 emit(PingSample(sequence++, rtt))
-                delay(intervalMs)
+
+                val elapsedMs = (System.nanoTime() - startedAt) / NANOS_PER_MILLI
+                val remainingMs = intervalMs - elapsedMs
+                if (remainingMs > 0) delay(remainingMs)
             }
         }
     }
@@ -60,9 +70,11 @@ class PingEngine(
     }
 
     companion object {
-        const val DEFAULT_INTERVAL_MS = 1000L
+        const val DEFAULT_INTERVAL_MS = 200L
+        const val MIN_INTERVAL_MS = 200L
         const val DEFAULT_TIMEOUT_MS = 2000L
 
+        private const val NANOS_PER_MILLI = 1_000_000L
         private const val PROCESS_GRACE_MS = 1000L
         private const val PING_BINARY = "/system/bin/ping"
 
