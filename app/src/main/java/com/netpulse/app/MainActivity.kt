@@ -17,6 +17,7 @@ import com.netpulse.app.databinding.ActivityMainBinding
 import com.netpulse.app.ui.monitor.MonitorError
 import com.netpulse.app.ui.monitor.MonitorUiState
 import com.netpulse.app.ui.monitor.MonitorViewModel
+import com.netpulse.app.ui.monitor.PingInterval
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -48,6 +49,14 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
+        // Restore the selected interval (e.g. after rotation), then listen for changes.
+        binding.intervalGroup.check(buttonForInterval(viewModel.uiState.value.interval))
+        binding.intervalGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (isChecked) {
+                intervalForButton(checkedId)?.let { viewModel.onIntervalChanged(it) }
+            }
+        }
+
         binding.toggleButton.setOnClickListener {
             if (viewModel.uiState.value.isRunning) {
                 viewModel.stop()
@@ -72,11 +81,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun render(state: MonitorUiState) {
         val stats = state.stats
+        val canEdit = !state.isRunning
 
         binding.toggleButton.setText(
             if (state.isRunning) R.string.action_stop else R.string.action_start
         )
-        binding.hostInput.isEnabled = !state.isRunning
+        binding.hostInput.isEnabled = canEdit
+        binding.intervalFast.isEnabled = canEdit
+        binding.intervalNormal.isEnabled = canEdit
+        binding.intervalSlow.isEnabled = canEdit
 
         binding.latencyValue.text = formatMs(stats.lastMs)
         binding.minValue.text = formatMs(stats.minMs)
@@ -101,6 +114,19 @@ class MainActivity : AppCompatActivity() {
         }
         binding.errorText.isVisible = errorRes != null
         if (errorRes != null) binding.errorText.setText(errorRes)
+    }
+
+    private fun intervalForButton(buttonId: Int): PingInterval? = when (buttonId) {
+        R.id.intervalFast -> PingInterval.FAST
+        R.id.intervalNormal -> PingInterval.NORMAL
+        R.id.intervalSlow -> PingInterval.SLOW
+        else -> null
+    }
+
+    private fun buttonForInterval(interval: PingInterval): Int = when (interval) {
+        PingInterval.FAST -> R.id.intervalFast
+        PingInterval.NORMAL -> R.id.intervalNormal
+        PingInterval.SLOW -> R.id.intervalSlow
     }
 
     private fun formatMs(value: Double?): String =
