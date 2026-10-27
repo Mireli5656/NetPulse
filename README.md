@@ -2,22 +2,19 @@
 
 A lightweight Android app for measuring network quality: real ICMP latency, jitter and packet loss. DNS benchmarking is on the roadmap.
 
-> **Status: Beta (v0.1.0-beta).** Core ping monitoring works. Other features are still in development, see the [roadmap](#roadmap).
+> **Status: v0.2.0.** Core ping monitoring works. Other features are still in development, see the [roadmap](#roadmap).
 
 ## Features
 
-### Available in v0.1.0-beta
+### Available now
 
 - Live ICMP ping monitor with Start / Stop
+- Selectable ping interval: 0.2 s (default), 0.5 s or 1 s
+- Steady ping rhythm: the interval is counted from the start of one ping to the start of the next
 - Latency, minimum / average / maximum, jitter and packet loss (rolling window of the last 300 samples)
 - Material Design 3 interface with light and dark themes that follow the system setting
 - Test survives screen rotation and stops automatically when the app leaves the foreground
 - Host name and IP address validation
-
-### Added since v0.1.0-beta (in `main`, coming in the next beta)
-
-- Selectable ping interval: 0.2 s (default), 0.5 s or 1 s
-- Steady ping rhythm: the interval is counted from the start of one ping to the start of the next
 
 ### Roadmap
 
@@ -27,9 +24,9 @@ A lightweight Android app for measuring network quality: real ICMP latency, jitt
 - Interactive latency charts
 - Test history (Room) and CSV export
 - Settings (DataStore)
-- Signed release builds
+- Release builds signed with a permanent key
 
-## Download (Beta)
+## Download
 
 1. Open the [Releases](../../releases) page.
 2. Download the `.apk` file from the newest release. The APK is attached a few minutes after a release is published, once the build finishes.
@@ -37,7 +34,7 @@ A lightweight Android app for measuring network quality: real ICMP latency, jitt
 
 Requires Android 8.0 (API 26) or newer.
 
-Beta builds are signed with a debug key. A new beta may therefore need the previous one to be uninstalled first.
+Builds are currently signed with a debug key. Each new version may therefore need the previous one to be uninstalled first. A permanent signing key is planned.
 
 ## How it works
 
@@ -47,7 +44,7 @@ Some devices restrict the system `ping` tool. In that case the app shows an erro
 
 ### Ping interval and Wi-Fi power saving
 
-Wi-Fi power saving can put the radio to sleep between widely spaced packets, which can make latency look higher and less stable. For this reason the newer builds ping every 0.2 seconds by default. You can switch to 0.5 s or 1 s to compare the results on your own device. How strong the effect is depends on the device and the access point.
+Wi-Fi power saving can put the radio to sleep between widely spaced packets, which can make latency look higher and less stable. For this reason NetPulse pings every 0.2 seconds by default. You can switch to 0.5 s or 1 s to compare the results on your own device. How strong the effect is depends on the device and the access point.
 
 ## Privacy
 
@@ -79,5 +76,4 @@ app/src/main/java/com/netpulse/app/
 The project is built entirely on GitHub Actions, so no local setup is needed.
 
 - Every push to `main` runs the unit tests and builds a debug APK. Open the run under the **Actions** tab and download the `NetPulse-debug-apk` artifact.
-- Publishing a GitHub release (for example with the tag `v0.1.0-beta`) builds the APK and attaches it to that release automatically.
-- 
+- Publishing a GitHub release (for example with the tag `v0.2.0`) builds the APK and attaches it to that release automatically.
