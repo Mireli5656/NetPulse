@@ -6,7 +6,7 @@ A lightweight Android app for measuring network quality: real ICMP latency, jitt
 
 ## Features
 
-### Available now
+### Available in v0.1.0-beta
 
 - Live ICMP ping monitor with Start / Stop
 - Latency, minimum / average / maximum, jitter and packet loss (rolling window of the last 300 samples)
@@ -14,9 +14,16 @@ A lightweight Android app for measuring network quality: real ICMP latency, jitt
 - Test survives screen rotation and stops automatically when the app leaves the foreground
 - Host name and IP address validation
 
+### Added since v0.1.0-beta (in `main`, coming in the next beta)
+
+- Selectable ping interval: 0.2 s (default), 0.5 s or 1 s
+- Steady ping rhythm: the interval is counted from the start of one ping to the start of the next
+
 ### Roadmap
 
-- DNS benchmark for Cloudflare, Google, Quad9 and Control D, measuring real DNS query time separately from ICMP ping
+- DNS benchmark for Cloudflare, Google, Quad9, Control D and your current DNS, with cached and uncached lookups, measured separately from ICMP ping
+- DNS leak test (opt-in, because it sends DNS queries to third-party services)
+- Optional "keep Wi-Fi awake" mode on devices that support it
 - Interactive latency charts
 - Test history (Room) and CSV export
 - Settings (DataStore)
@@ -37,6 +44,10 @@ Beta builds are signed with a debug key. A new beta may therefore need the previ
 NetPulse runs the device's system `ping` tool inside the app and reads the round-trip time from each reply. Packets that get no reply within 2 seconds count as lost. Jitter is the mean absolute difference between consecutive successful round-trip times.
 
 Some devices restrict the system `ping` tool. In that case the app shows an error message instead of results.
+
+### Ping interval and Wi-Fi power saving
+
+Wi-Fi power saving can put the radio to sleep between widely spaced packets, which can make latency look higher and less stable. For this reason the newer builds ping every 0.2 seconds by default. You can switch to 0.5 s or 1 s to compare the results on your own device. How strong the effect is depends on the device and the access point.
 
 ## Privacy
 
