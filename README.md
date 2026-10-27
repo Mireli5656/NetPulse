@@ -80,3 +80,4 @@ The project is built entirely on GitHub Actions, so no local setup is needed.
 
 - Every push to `main` runs the unit tests and builds a debug APK. Open the run under the **Actions** tab and download the `NetPulse-debug-apk` artifact.
 - Publishing a GitHub release (for example with the tag `v0.1.0-beta`) builds the APK and attaches it to that release automatically.
+- 
