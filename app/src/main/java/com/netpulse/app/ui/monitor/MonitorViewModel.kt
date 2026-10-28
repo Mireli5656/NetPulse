@@ -31,6 +31,7 @@ enum class PingInterval(val ms: Long) {
 data class MonitorUiState(
     val host: String = MonitorViewModel.DEFAULT_HOST,
     val interval: PingInterval = PingInterval.FAST,
+    val keepWifiAwake: Boolean = false,
     val isRunning: Boolean = false,
     val stats: PingStats = PingStats.EMPTY,
     val samples: List<PingSample> = emptyList(),
@@ -54,6 +55,11 @@ class MonitorViewModel : ViewModel() {
     fun onIntervalChanged(interval: PingInterval) {
         if (_uiState.value.isRunning) return
         _uiState.update { it.copy(interval = interval) }
+    }
+
+    fun onKeepWifiAwakeChanged(enabled: Boolean) {
+        if (_uiState.value.isRunning) return
+        _uiState.update { it.copy(keepWifiAwake = enabled) }
     }
 
     fun start() {
