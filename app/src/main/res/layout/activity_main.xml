@@ -100,6 +100,24 @@
             android:textAppearance="?attr/textAppearanceBodySmall"
             android:textColor="?attr/colorOnSurfaceVariant" />
 
+        <!-- Keep Wi-Fi awake -->
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/keepAwakeSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/keep_awake_label"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textColor="?attr/colorOnSurface" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/keep_awake_hint"
+            android:textAppearance="?attr/textAppearanceBodySmall"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/toggleButton"
             android:layout_width="match_parent"
