@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.netpulse.app.databinding.ActivityMainBinding
+import com.netpulse.app.network.WifiAwakeLock
 import com.netpulse.app.ui.monitor.MonitorError
 import com.netpulse.app.ui.monitor.MonitorUiState
 import com.netpulse.app.ui.monitor.MonitorViewModel
@@ -23,6 +24,7 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var wifiLock: WifiAwakeLock
     private val viewModel: MonitorViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,8 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        wifiLock = WifiAwakeLock(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
             val bars = insets.getInsets(
@@ -57,6 +61,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Restore the keep-awake choice first, then listen for changes.
+        binding.keepAwakeSwitch.isChecked = viewModel.uiState.value.keepWifiAwake
+        binding.keepAwakeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.onKeepWifiAwakeChanged(isChecked)
+        }
+
         binding.toggleButton.setOnClickListener {
             if (viewModel.uiState.value.isRunning) {
                 viewModel.stop()
@@ -75,6 +85,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+        // Never hold the Wi-Fi lock in the background.
+        wifiLock.release()
         // Keep the test alive across rotation, but never run it in the background.
         if (!isChangingConfigurations) viewModel.stop()
     }
@@ -90,6 +102,9 @@ class MainActivity : AppCompatActivity() {
         binding.intervalFast.isEnabled = canEdit
         binding.intervalNormal.isEnabled = canEdit
         binding.intervalSlow.isEnabled = canEdit
+        binding.keepAwakeSwitch.isEnabled = canEdit
+
+        updateWifiLock(state)
 
         binding.latencyValue.text = formatMs(stats.lastMs)
         binding.minValue.text = formatMs(stats.minMs)
@@ -114,6 +129,15 @@ class MainActivity : AppCompatActivity() {
         }
         binding.errorText.isVisible = errorRes != null
         if (errorRes != null) binding.errorText.setText(errorRes)
+    }
+
+    /** Holds the Wi-Fi lock only while a test is running with the option enabled. */
+    private fun updateWifiLock(state: MonitorUiState) {
+        if (state.isRunning && state.keepWifiAwake) {
+            wifiLock.acquire()
+        } else {
+            wifiLock.release()
+        }
     }
 
     private fun intervalForButton(buttonId: Int): PingInterval? = when (buttonId) {
