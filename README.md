@@ -6,7 +6,7 @@ A lightweight Android app for measuring network quality: real ICMP latency, jitt
 
 ## Features
 
-### Available now
+### Available in v0.2.0
 
 - Live ICMP ping monitor with Start / Stop
 - Selectable ping interval: 0.2 s (default), 0.5 s or 1 s
@@ -16,11 +16,14 @@ A lightweight Android app for measuring network quality: real ICMP latency, jitt
 - Test survives screen rotation and stops automatically when the app leaves the foreground
 - Host name and IP address validation
 
+### Added since v0.2.0 (in `main`, coming in the next release)
+
+- Optional "Keep Wi-Fi awake while testing" switch (off by default)
+
 ### Roadmap
 
 - DNS benchmark for Cloudflare, Google, Quad9, Control D and your current DNS, with cached and uncached lookups, measured separately from ICMP ping
 - DNS leak test (opt-in, because it sends DNS queries to third-party services)
-- Optional "keep Wi-Fi awake" mode on devices that support it
 - Interactive latency charts
 - Test history (Room) and CSV export
 - Settings (DataStore)
@@ -46,9 +49,14 @@ Some devices restrict the system `ping` tool. In that case the app shows an erro
 
 Wi-Fi power saving can put the radio to sleep between widely spaced packets, which can make latency look higher and less stable. For this reason NetPulse pings every 0.2 seconds by default. You can switch to 0.5 s or 1 s to compare the results on your own device. How strong the effect is depends on the device and the access point.
 
+### Keep Wi-Fi awake (in `main`)
+
+The optional switch asks Android to keep Wi-Fi out of power saving during a test. On Android 10 and newer the system only honors it while the screen is on and NetPulse is in the foreground. On Android 8 and 9 the older high-performance lock is used. Results then show best-case latency rather than what an idle phone typically sees, so it is worth comparing both. The lock is released when the test stops or the app leaves the foreground, and it uses a little more battery.
+
 ## Privacy
 
-- Only two permissions: `INTERNET` and `ACCESS_NETWORK_STATE`. No location, contacts or storage access.
+- Released builds (v0.2.0) use only two permissions: `INTERNET` and `ACCESS_NETWORK_STATE`. No location, contacts or storage access.
+- The development version in `main` also declares `WAKE_LOCK`. It is used only to keep Wi-Fi awake during a test, and only if you turn that option on.
 - No accounts, ads, analytics or tracking libraries.
 - Ping packets go only to the host you enter (default `1.1.1.1`).
 - Nothing is uploaded. Backups are disabled and cleartext HTTP traffic is blocked.
@@ -67,7 +75,7 @@ Wi-Fi power saving can put the radio to sleep between widely spaced packets, whi
 app/src/main/java/com/netpulse/app/
 ├── MainActivity.kt
 ├── domain/        ping models and statistics
-├── network/       ping engine
+├── network/       ping engine and Wi-Fi lock helper
 └── ui/monitor/    monitor screen state and logic
 ```
 
