@@ -28,6 +28,10 @@
     <string name="interval_slow">1 s</string>
     <string name="interval_hint">Slower intervals can show higher latency, because Wi-Fi power saving may put the radio to sleep between pings.</string>
 
+    <!-- Keep Wi-Fi awake -->
+    <string name="keep_awake_label">Keep Wi-Fi awake while testing</string>
+    <string name="keep_awake_hint">Asks Android to keep Wi-Fi out of power saving during the test. On Android 10 and newer it only works while the screen is on and NetPulse is in the foreground, and it uses a little more battery. Results then show best-case latency.</string>
+
     <!-- Errors -->
     <string name="error_invalid_host">Enter a valid host name or IP address.</string>
     <string name="error_ping_unavailable">This device does not provide the system ping tool.</string>
