@@ -3,6 +3,7 @@
     <string name="app_name">NetPulse</string>
     <string name="main_title">NetPulse</string>
     <string name="main_subtitle">Network latency and DNS benchmark</string>
+    <string name="action_open_dns">DNS benchmark</string>
 
     <!-- Monitor screen -->
     <string name="monitor_host_hint">Host or IP address</string>
@@ -31,6 +32,28 @@
     <!-- Keep Wi-Fi awake -->
     <string name="keep_awake_label">Keep Wi-Fi awake while testing</string>
     <string name="keep_awake_hint">Asks Android to keep Wi-Fi out of power saving during the test. On Android 10 and newer it only works while the screen is on and NetPulse is in the foreground, and it uses a little more battery. Results then show best-case latency.</string>
+
+    <!-- DNS benchmark -->
+    <string name="dns_title">DNS benchmark</string>
+    <string name="dns_subtitle">Measures how fast DNS servers answer real queries. This is separate from ping.</string>
+    <string name="dns_type_label">Lookup type</string>
+    <string name="dns_type_cached">Cached</string>
+    <string name="dns_type_uncached">Uncached</string>
+    <string name="dns_type_hint_cached">Asks for a popular name the server has already stored, so it shows the fastest possible answer.</string>
+    <string name="dns_type_hint_uncached">Asks for a random name nobody has requested, so the server must look it up first. The answer is usually NXDOMAIN (name does not exist), which is still a real response, and it shows a typical fresh lookup.</string>
+    <string name="dns_pacing_hint">Each server gets a short warm-up first, then queries are sent every 0.2 s. Warm-up results are not counted.</string>
+    <string name="dns_privacy_note">Queries for example.com (and random names under it) go directly to each server listed below. Nothing else is sent.</string>
+    <string name="dns_system_provider">System DNS</string>
+
+    <string name="dns_status_waiting">Waiting</string>
+    <string name="dns_status_testing">Testing…</string>
+    <string name="dns_status_no_answer">No answer</string>
+    <string name="dns_fastest_badge">Fastest</string>
+    <string name="dns_row_range">Min %1$.1f ms · Max %2$.1f ms</string>
+    <string name="dns_row_failed">%1$d of %2$d queries failed</string>
+
+    <string name="dns_summary_fastest">Fastest: %1$s, %2$.1f ms on average</string>
+    <string name="dns_summary_no_answer">No DNS server answered. Check your connection and try again.</string>
 
     <!-- Errors -->
     <string name="error_invalid_host">Enter a valid host name or IP address.</string>
