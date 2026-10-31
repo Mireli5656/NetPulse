@@ -40,9 +40,9 @@
     <string name="dns_type_cached">Cached</string>
     <string name="dns_type_uncached">Uncached</string>
     <string name="dns_type_hint_cached">Asks for a popular name the server has already stored, so it shows the fastest possible answer.</string>
-    <string name="dns_type_hint_uncached">Asks for a random name nobody has requested, so the server must look it up first. The answer is usually NXDOMAIN (name does not exist), which is still a real response, and it shows a typical fresh lookup.</string>
+    <string name="dns_type_hint_uncached">Asks for a random .com name that does not exist, so the server cannot answer from memory and has to ask a .com server. The answer is NXDOMAIN (name does not exist), which is still a real response. It shows a typical fresh lookup.</string>
     <string name="dns_pacing_hint">Each server gets a short warm-up first, then queries are sent every 0.2 s. Warm-up results are not counted.</string>
-    <string name="dns_privacy_note">Queries for example.com (and random names under it) go directly to each server listed below. Nothing else is sent.</string>
+    <string name="dns_privacy_note">Queries for example.com and random .com names go directly to each server listed below, so those servers can see them. Nothing else is sent.</string>
     <string name="dns_system_provider">System DNS</string>
 
     <string name="dns_status_waiting">Waiting</string>
