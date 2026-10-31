@@ -18,8 +18,25 @@ data class DnsRowItem(
 
 class DnsRowAdapter : ListAdapter<DnsRowItem, DnsRowAdapter.ViewHolder>(DiffCallback) {
 
+    private var recyclerView: RecyclerView? = null
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        this.recyclerView = null
+        super.onDetachedFromRecyclerView(recyclerView)
+    }
+
     fun submitRows(rows: List<DnsRow>, fastestIp: String?) {
-        submitList(rows.map { DnsRowItem(it, it.provider.ip == fastestIp) })
+        submitList(rows.map { DnsRowItem(it, it.provider.ip == fastestIp) }) {
+            // The list sits inside the page's ScrollView and never scrolls on its own.
+            // When rows move (the final sorting), it could keep following the moved row
+            // and hide the rows above, so always show it from the first row.
+            recyclerView?.scrollToPosition(0)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
