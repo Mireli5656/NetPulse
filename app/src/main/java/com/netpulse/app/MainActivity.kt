@@ -1,5 +1,6 @@
 package com.netpulse.app
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.netpulse.app.databinding.ActivityMainBinding
 import com.netpulse.app.network.WifiAwakeLock
+import com.netpulse.app.ui.dns.DnsBenchmarkActivity
 import com.netpulse.app.ui.monitor.MonitorError
 import com.netpulse.app.ui.monitor.MonitorUiState
 import com.netpulse.app.ui.monitor.MonitorViewModel
@@ -42,6 +44,12 @@ class MainActivity : AppCompatActivity() {
             )
             view.setPadding(bars.left, bars.top, bars.right, bars.bottom)
             insets
+        }
+
+        binding.openDnsButton.setOnClickListener {
+            // Only one test at a time: they would disturb each other's measurements.
+            viewModel.stop()
+            startActivity(Intent(this, DnsBenchmarkActivity::class.java))
         }
 
         binding.hostInput.setText(viewModel.uiState.value.host)
