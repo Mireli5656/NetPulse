@@ -11,7 +11,7 @@ enum class DnsTestType {
     /** A popular name the resolver has just cached: measures its fast path. */
     CACHED,
 
-    /** A unique name nobody has asked for: measures a fresh lookup through the resolver. */
+    /** A unique name nobody has asked for: the resolver has to ask a .com server. */
     UNCACHED
 }
 
@@ -103,7 +103,14 @@ class DnsBenchmark(
 
         /** Reserved example domain, operated for documentation and testing. */
         const val CACHED_NAME = "example.com"
-        const val UNCACHED_BASE_DOMAIN = "example.com"
+
+        /**
+         * Unique random names are asked directly under this top-level domain. Such a
+         * name does not exist, so the resolver cannot answer from a stored answer and
+         * has to ask a .com server. The random label is long enough that it will not
+         * match a real domain.
+         */
+        const val UNCACHED_BASE_DOMAIN = "com"
 
         private const val UNIQUE_LABEL_LENGTH = 16
         private const val NANOS_PER_MILLI = 1_000_000L
