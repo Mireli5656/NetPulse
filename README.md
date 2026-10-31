@@ -1,12 +1,12 @@
 # NetPulse
 
-A lightweight Android app for measuring network quality: real ICMP latency, jitter and packet loss. DNS benchmarking is on the roadmap.
+A lightweight Android app for measuring network quality: real ICMP latency, jitter and packet loss, plus a DNS benchmark that measures real DNS query time separately from ping.
 
-> **Status: v0.3.0.** Core ping monitoring works. Other features are still in development, see the [roadmap](#roadmap).
+> **Status: v0.3.0 (latest release).** Core ping monitoring works. The DNS benchmark is already in `main` and will ship in the next release. See the [roadmap](#roadmap) for what is still missing.
 
 ## Features
 
-### Available now
+### Available in v0.3.0
 
 - Live ICMP ping monitor with Start / Stop
 - Selectable ping interval: 0.2 s (default), 0.5 s or 1 s
@@ -17,9 +17,15 @@ A lightweight Android app for measuring network quality: real ICMP latency, jitt
 - Test survives screen rotation and stops automatically when the app leaves the foreground
 - Host name and IP address validation
 
+### Added since v0.3.0 (in `main`, coming in the next release)
+
+- DNS benchmark screen for Cloudflare, Google, Quad9 and Control D
+- Cached and uncached lookup tests, with the fastest server highlighted after a full run
+- Results per server: average, minimum and maximum response time, and failed queries
+
 ### Roadmap
 
-- DNS benchmark for Cloudflare, Google, Quad9, Control D and your current DNS, with cached and uncached lookups, measured separately from ICMP ping
+- Your current DNS server ("System DNS") in the benchmark
 - DNS leak test (opt-in, because it sends DNS queries to third-party services)
 - Interactive latency charts
 - Test history (Room) and CSV export
@@ -38,6 +44,8 @@ Builds are currently signed with a debug key. Each new version may therefore nee
 
 ## How it works
 
+### Ping
+
 NetPulse runs the device's system `ping` tool inside the app and reads the round-trip time from each reply. Packets that get no reply within 2 seconds count as lost. Jitter is the mean absolute difference between consecutive successful round-trip times.
 
 Some devices restrict the system `ping` tool. In that case the app shows an error message instead of results.
@@ -50,13 +58,28 @@ Wi-Fi power saving can put the radio to sleep between widely spaced packets, whi
 
 The optional switch asks Android to keep Wi-Fi out of power saving during a test. On Android 10 and newer the system only honors it while the screen is on and NetPulse is in the foreground. On Android 8 and 9 the older high-performance lock is used. Results then show best-case latency rather than what an idle phone typically sees, so it is worth comparing both. The lock is released when the test stops or the app leaves the foreground, and it uses a little more battery.
 
+### DNS benchmark (in `main`)
+
+The benchmark sends real DNS queries (an `A` record request over UDP, port 53) and measures the time from sending the query to receiving the matching answer. This is independent of ICMP ping.
+
+- Servers are tested one after another, not in parallel, so they do not disturb each other.
+- Each server first gets 3 warm-up queries. They wake the Wi-Fi radio and fill the server's cache, and they are never counted.
+- Then 10 queries are sent, 0.2 seconds apart.
+- **Cached** asks for the same popular name every time (`example.com`), so it shows the fastest possible answer.
+- **Uncached** asks for a unique random name under `example.com` each time. The server has to look it up, and the answer is usually "name does not exist" (NXDOMAIN). That is still a real response and counts as a success.
+- Timeouts, network errors and server errors (such as SERVFAIL) count as failed queries.
+- After a full run the servers are sorted by average time, and the fastest is highlighted.
+
+Good to know: the uncached result is an approximation, because some servers answer unknown names faster than a real lookup. The test uses classic unencrypted DNS on port 53, so a network that intercepts or redirects DNS traffic can change the results.
+
 ## Privacy
 
 - Three permissions: `INTERNET`, `ACCESS_NETWORK_STATE` and `WAKE_LOCK`. No location, contacts or storage access.
 - `WAKE_LOCK` is used only to keep Wi-Fi awake during a test, and only if you turn that option on.
 - No accounts, ads, analytics or tracking libraries.
 - Ping packets go only to the host you enter (default `1.1.1.1`).
-- Nothing is uploaded. Backups are disabled and cleartext HTTP traffic is blocked.
+- The DNS benchmark (in `main`) sends queries for `example.com` and random names under it directly to Cloudflare (`1.1.1.1`), Google (`8.8.8.8`), Quad9 (`9.9.9.9`) and Control D (`76.76.2.0`). Like any DNS query, these servers can see your IP address and the names you ask for. Nothing else is sent.
+- Nothing is uploaded elsewhere. Backups are disabled and cleartext HTTP traffic is blocked.
 
 ## Tech stack
 
@@ -71,9 +94,11 @@ The optional switch asks Android to keep Wi-Fi out of power saving during a test
 ```
 app/src/main/java/com/netpulse/app/
 ├── MainActivity.kt
-├── domain/        ping models and statistics
-├── network/       ping engine and Wi-Fi lock helper
-└── ui/monitor/    monitor screen state and logic
+├── domain/        ping and DNS models, statistics
+├── network/       ping engine, DNS engine and benchmark, Wi-Fi lock helper
+└── ui/
+    ├── monitor/   ping monitor state and logic
+    └── dns/       DNS benchmark screen, state and list adapter
 ```
 
 ## Building
@@ -82,3 +107,7 @@ The project is built entirely on GitHub Actions, so no local setup is needed.
 
 - Every push to `main` runs the unit tests and builds a debug APK. Open the run under the **Actions** tab and download the `NetPulse-debug-apk` artifact.
 - Publishing a GitHub release (for example with the tag `v0.3.0`) builds the APK and attaches it to that release automatically.
+
+## License
+
+Released under the [MIT License](LICENSE).
