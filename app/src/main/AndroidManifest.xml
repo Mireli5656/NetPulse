@@ -22,6 +22,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.dns.DnsBenchmarkActivity"
+            android:exported="false"
+            android:label="@string/dns_title"
+            android:parentActivityName=".MainActivity" />
+
     </application>
 
 </manifest>
