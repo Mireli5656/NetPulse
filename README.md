@@ -26,6 +26,7 @@ A lightweight Android app for measuring network quality: real ICMP latency, jitt
 ### Roadmap
 
 - Your current DNS server ("System DNS") in the benchmark
+- Custom DNS server addresses
 - DNS leak test (opt-in, because it sends DNS queries to third-party services)
 - Interactive latency charts
 - Test history (Room) and CSV export
@@ -66,11 +67,15 @@ The benchmark sends real DNS queries (an `A` record request over UDP, port 53) a
 - Each server first gets 3 warm-up queries. They wake the Wi-Fi radio and fill the server's cache, and they are never counted.
 - Then 10 queries are sent, 0.2 seconds apart.
 - **Cached** asks for the same popular name every time (`example.com`), so it shows the fastest possible answer.
-- **Uncached** asks for a unique random name under `example.com` each time. The server has to look it up, and the answer is usually "name does not exist" (NXDOMAIN). That is still a real response and counts as a success.
+- **Uncached** asks for a different random 16-character name directly under `.com` each time (for example `a1b2c3d4e5f60718.com`). Such a name does not exist, so the server cannot answer from memory and has to ask a `.com` server. The answer is NXDOMAIN (name does not exist). That is still a real response and counts as a success.
 - Timeouts, network errors and server errors (such as SERVFAIL) count as failed queries.
 - After a full run the servers are sorted by average time, and the fastest is highlighted.
 
-Good to know: the uncached result is an approximation, because some servers answer unknown names faster than a real lookup. The test uses classic unencrypted DNS on port 53, so a network that intercepts or redirects DNS traffic can change the results.
+Good to know:
+
+- The uncached result is an approximation. Servers may treat names that do not exist differently from real lookups.
+- The test uses classic unencrypted DNS on port 53. A network that intercepts or redirects DNS traffic can change the results.
+- "No answer" means the server did not reply to any query. Your network may block DNS traffic to that address, so this does not always mean the server itself is down.
 
 ## Privacy
 
@@ -78,7 +83,7 @@ Good to know: the uncached result is an approximation, because some servers answ
 - `WAKE_LOCK` is used only to keep Wi-Fi awake during a test, and only if you turn that option on.
 - No accounts, ads, analytics or tracking libraries.
 - Ping packets go only to the host you enter (default `1.1.1.1`).
-- The DNS benchmark (in `main`) sends queries for `example.com` and random names under it directly to Cloudflare (`1.1.1.1`), Google (`8.8.8.8`), Quad9 (`9.9.9.9`) and Control D (`76.76.2.0`). Like any DNS query, these servers can see your IP address and the names you ask for. Nothing else is sent.
+- The DNS benchmark (in `main`) sends queries for `example.com` and random `.com` names directly to Cloudflare (`1.1.1.1`), Google (`8.8.8.8`), Quad9 (`9.9.9.9`) and Control D (`76.76.2.0`). Like any DNS query, these servers can see your IP address and the names you ask for, and they may ask other DNS servers (such as `.com` servers) to answer. Nothing else is sent.
 - Nothing is uploaded elsewhere. Backups are disabled and cleartext HTTP traffic is blocked.
 
 ## Tech stack
